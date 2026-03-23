@@ -1,0 +1,210 @@
+# Idealoop SEO Content Plan (200 Articles) --- Checklist
+
+## Cluster 1 --- Product Feedback
+
+-   [x] 1. What Is Product Feedback and Why It Matters
+-   [x] 2. How to Collect Product Feedback From Users
+-   [x] 3. Best Product Feedback Tools for Startups
+-   [x] 4. Product Feedback vs Customer Feedback
+-   [x] 5. 10 Ways to Collect Feedback From Your Users
+-   [ ] 6. How to Turn User Feedback Into Product Features
+-   [ ] 7. How Successful SaaS Companies Use Customer Feedback
+-   [ ] 8. Product Feedback Examples From Top Startups
+-   [ ] 9. The Best Feedback Collection Methods for SaaS
+-   [ ] 10. How to Analyze Product Feedback
+-   [ ] 11. Customer Feedback Tools Compared
+-   [ ] 12. How to Build a Feedback Loop With Your Customers
+-   [ ] 13. Why Ignoring User Feedback Kills Products
+-   [ ] 14. Product Feedback Management Guide
+-   [ ] 15. Qualitative vs Quantitative Product Feedback
+-   [ ] 16. How to Ask Users for Feedback Without Annoying Them
+-   [ ] 17. Feedback Widgets Explained
+-   [ ] 18. The Best Ways to Ask for Feature Requests
+-   [ ] 19. How to Organize Customer Feedback
+-   [ ] 20. Turning Customer Complaints Into Product Ideas
+-   [ ] 21. How Startups Use Feedback to Build Better Products
+-   [ ] 22. Collecting Feedback in Early-Stage Startups
+-   [ ] 23. Feedback Collection Mistakes Startups Make
+-   [ ] 24. How to Prioritize Product Feedback
+-   [ ] 25. Product Feedback Workflow for SaaS Teams
+
+## Cluster 2 --- Feature Request Management
+
+-   [ ] 26. What Is Feature Request Management
+-   [ ] 27. Best Feature Request Tools
+-   [ ] 28. Feature Request Software for SaaS
+-   [ ] 29. How to Manage Feature Requests From Users
+-   [ ] 30. Feature Request Templates for Product Teams
+-   [ ] 31. Feature Request Process for Startups
+-   [ ] 32. How to Organize Feature Requests
+-   [ ] 33. How to Prioritize Feature Requests
+-   [ ] 34. Feature Request Workflow Explained
+-   [ ] 35. Managing Feature Requests in Agile Teams
+-   [ ] 36. Feature Request Tracking Tools
+-   [ ] 37. Feature Request Voting Systems
+-   [ ] 38. Feature Request Board Explained
+-   [ ] 39. Public Feature Request Boards
+-   [ ] 40. How to Handle Too Many Feature Requests
+-   [ ] 41. Feature Request Prioritization Framework
+-   [ ] 42. Feature Request Examples From SaaS Companies
+-   [ ] 43. Building a Feature Request System
+-   [ ] 44. Collecting Feature Requests From Customers
+-   [ ] 45. Feature Request Management Best Practices
+-   [ ] 46. Why Feature Voting Works
+-   [ ] 47. Feature Request Management Tools Compared
+-   [ ] 48. Best Ways to Collect Feature Requests
+-   [ ] 49. Feature Request Systems for Product Teams
+-   [ ] 50. Managing Feature Requests at Scale
+
+## Clusters 3--8 --- Remaining Topics
+
+-   [ ] 51. What Is a Product Roadmap
+-   [ ] 52. Product Roadmap Examples
+-   [ ] 53. Product Roadmap Templates
+-   [ ] 54. Public Product Roadmaps Explained
+-   [ ] 55. How to Build a Product Roadmap
+-   [ ] 56. Product Roadmap Software
+-   [ ] 57. Roadmap Tools for Startups
+-   [ ] 58. Product Roadmap Best Practices
+-   [ ] 59. Product Roadmap Strategy
+-   [ ] 60. Agile Product Roadmaps
+-   [ ] 61. Startup Product Roadmaps
+-   [ ] 62. Product Roadmap Formats
+-   [ ] 63. Visual Product Roadmaps
+-   [ ] 64. Product Roadmap vs Product Backlog
+-   [ ] 65. Product Roadmap vs Product Plan
+-   [ ] 66. Customer-Driven Product Roadmaps
+-   [ ] 67. How to Share Your Product Roadmap Publicly
+-   [ ] 68. Product Roadmap for SaaS Startups
+-   [ ] 69. Product Roadmap Prioritization
+-   [ ] 70. Product Roadmap Examples From Big Companies
+-   [ ] 71. Product Roadmap Mistakes
+-   [ ] 72. Roadmap Planning Guide
+-   [ ] 73. Product Roadmap Presentation Tips
+-   [ ] 74. Quarterly Product Roadmap Planning
+-   [ ] 75. Product Roadmap Frameworks
+-   [ ] 76. What Product Managers Actually Do
+-   [ ] 77. Product Management Tools
+-   [ ] 78. Product Management for Startups
+-   [ ] 79. Product Management Best Practices
+-   [ ] 80. Product Manager Workflow
+-   [ ] 81. Product Management Software
+-   [ ] 82. Product Discovery Explained
+-   [ ] 83. Product Development Process
+-   [ ] 84. Product Lifecycle Explained
+-   [ ] 85. Product Strategy Guide
+-   [ ] 86. Product Decision Making
+-   [ ] 87. Product Management Metrics
+-   [ ] 88. Product Management Frameworks
+-   [ ] 89. Product Prioritization Methods
+-   [ ] 90. Product Backlog Management
+-   [ ] 91. Product Feature Planning
+-   [ ] 92. Product Development Roadmap
+-   [ ] 93. How Product Teams Make Decisions
+-   [ ] 94. Product Iteration Strategies
+-   [ ] 95. Product Team Collaboration
+-   [ ] 96. Data-Driven Product Decisions
+-   [ ] 97. Product Planning Process
+-   [ ] 98. Product Experimentation Guide
+-   [ ] 99. Product Hypothesis Testing
+-   [ ] 100. Product Management Workflow
+-   [ ] 101. What Is User Research
+-   [ ] 102. User Research Methods
+-   [ ] 103. User Research for Startups
+-   [ ] 104. User Research vs Market Research
+-   [ ] 105. User Interviews Guide
+-   [ ] 106. User Testing Explained
+-   [ ] 107. User Research Tools
+-   [ ] 108. UX Research Methods
+-   [ ] 109. Customer Discovery Process
+-   [ ] 110. User Research Questions
+-   [ ] 111. User Persona Creation
+-   [ ] 112. Conducting Customer Interviews
+-   [ ] 113. User Feedback Analysis
+-   [ ] 114. Behavioral User Research
+-   [ ] 115. Product Research Methods
+-   [ ] 116. User Research Frameworks
+-   [ ] 117. How to Run User Surveys
+-   [ ] 118. User Testing Tools
+-   [ ] 119. Usability Testing Guide
+-   [ ] 120. User Research Workflow
+-   [ ] 121. Research Insights for Product Teams
+-   [ ] 122. User Research Examples
+-   [ ] 123. User Research Templates
+-   [ ] 124. Early-Stage User Research
+-   [ ] 125. Customer Research for SaaS
+-   [ ] 126. Customer Feedback Systems Explained
+-   [ ] 127. Customer Feedback Platforms
+-   [ ] 128. Customer Feedback Software
+-   [ ] 129. Customer Feedback Strategy
+-   [ ] 130. Customer Feedback Programs
+-   [ ] 131. Customer Feedback Loops
+-   [ ] 132. Feedback Systems for SaaS
+-   [ ] 133. Customer Feedback Analytics
+-   [ ] 134. Customer Experience Feedback
+-   [ ] 135. Voice of Customer Programs
+-   [ ] 136. Customer Insight Platforms
+-   [ ] 137. Customer Feedback Dashboards
+-   [ ] 138. Customer Feedback Automation
+-   [ ] 139. Customer Feedback Reporting
+-   [ ] 140. Customer Feedback Management
+-   [ ] 141. Customer Feedback Metrics
+-   [ ] 142. Customer Feedback Channels
+-   [ ] 143. Customer Feedback Surveys
+-   [ ] 144. Customer Feedback Strategy Guide
+-   [ ] 145. Customer Feedback Case Studies
+-   [ ] 146. Customer Feedback Best Practices
+-   [ ] 147. Customer Feedback Collection Methods
+-   [ ] 148. Customer Feedback Management Systems
+-   [ ] 149. Enterprise Feedback Platforms
+-   [ ] 150. Customer Feedback Workflows
+-   [ ] 151. Idealoop vs Canny
+-   [ ] 152. Idealoop vs Upvoty
+-   [ ] 153. Idealoop vs Featurebase
+-   [ ] 154. Idealoop vs Productboard
+-   [ ] 155. Best Alternatives to Canny
+-   [ ] 156. Best Alternatives to Upvoty
+-   [ ] 157. Best Alternatives to Featurebase
+-   [ ] 158. Best Feature Request Tools
+-   [ ] 159. Best Product Feedback Tools
+-   [ ] 160. Best Roadmap Tools
+-   [ ] 161. Best Product Management Tools
+-   [ ] 162. Best Customer Feedback Platforms
+-   [ ] 163. Best Tools for Product Teams
+-   [ ] 164. Best Tools for SaaS Product Managers
+-   [ ] 165. Best Tools for Feature Voting
+-   [ ] 166. Best Public Roadmap Tools
+-   [ ] 167. Best Feedback Widgets
+-   [ ] 168. Best Feature Voting Tools
+-   [ ] 169. Best Product Research Tools
+-   [ ] 170. Best Startup Product Tools
+-   [ ] 171. Best SaaS Product Tools
+-   [ ] 172. Best Idea Management Software
+-   [ ] 173. Best Idea Voting Platforms
+-   [ ] 174. Best Feedback Boards
+-   [ ] 175. Best Tools for Collecting Feature Requests
+-   [ ] 176. How Startups Build Products Users Love
+-   [ ] 177. Startup Product Strategy Guide
+-   [ ] 178. How to Validate Product Ideas
+-   [ ] 179. Feature Prioritization Frameworks
+-   [ ] 180. Product Market Fit Explained
+-   [ ] 181. How to Build in Public
+-   [ ] 182. Customer-Driven Product Development
+-   [ ] 183. MVP Development Guide
+-   [ ] 184. Product Launch Strategy
+-   [ ] 185. Product Iteration Guide
+-   [ ] 186. Customer-Led Growth Strategy
+-   [ ] 187. Startup Product Planning
+-   [ ] 188. Building Products With Customer Feedback
+-   [ ] 189. Product Development for SaaS
+-   [ ] 190. Product Validation Methods
+-   [ ] 191. Lean Product Development
+-   [ ] 192. Product Experimentation for Startups
+-   [ ] 193. How Startups Use Customer Feedback
+-   [ ] 194. Feature Prioritization Strategies
+-   [ ] 195. Product Improvement Framework
+-   [ ] 196. Startup Product Roadmaps
+-   [ ] 197. Building Better Products With Feedback
+-   [ ] 198. Product Feedback Analytics
+-   [ ] 199. Product Decision Framework
+-   [ ] 200. Continuous Product Improvement
