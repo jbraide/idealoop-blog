@@ -33,7 +33,7 @@ Vercel handles Cron jobs automatically via `vercel.json`. Create this file in yo
   ]
 }
 ```
-*The above schedule (`0 15 * * *`) triggers the agent every day at 4:00 PM GMT+1 (3:00 PM UTC).*
+*The above schedule (`0 16 * * *`) triggers the agent every day at 5:00 PM GMT+1 (4:00 PM UTC).*
 
 ## 4. Manual Trigger
 To manually trigger the AI agent, make an authenticated GET request:

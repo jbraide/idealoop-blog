@@ -24,13 +24,13 @@ export async function GET(request: NextRequest) {
         let topics;
 
         if (topicNumber) {
-            const allTopics = getNextTopics(200);
+            const allTopics = await getNextTopics(200);
             console.log(`LOG: Total topics checked: ${allTopics.length}`);
             const topic = allTopics.find(t => t.number === parseInt(topicNumber));
             console.log(`LOG: Found specific topic: ${topic ? JSON.stringify(topic) : "NONE"}`);
             topics = topic ? [topic] : [];
         } else {
-            topics = getNextTopics(1);
+            topics = await getNextTopics(1);
             console.log(`LOG: Auto-picked next topic: ${JSON.stringify(topics[0])}`);
         }
 
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
                 message: "No suitable topic found",
                 debug: {
                     requestedNumber: topicNumber,
-                    availableTopics: getNextTopics(200).map(t => t.number)
+                    availableTopics: (await getNextTopics(200)).map(t => t.number)
                 }
             });
         }
@@ -72,7 +72,6 @@ export async function GET(request: NextRequest) {
                         keywords: postData.keywords,
                         status: "DRAFT",
                         authorId: admin.id,
-                        // You might want to assign a default category if applicable
                     },
                 });
 
