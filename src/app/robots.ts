@@ -1,12 +1,12 @@
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://idealoop.xyz'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://blog.idealoop.xyz'
 
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
+      allow: ['/', '/sitemap.xml'],
       disallow: '/admin/',
     },
     sitemap: `${baseUrl}/sitemap.xml`,
