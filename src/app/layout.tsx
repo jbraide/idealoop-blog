@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from "@/components/providers/session-provider";
 import {
   OrganizationStructuredDataWrapper,
   WebsiteStructuredDataWrapper,
@@ -124,7 +123,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         suppressHydrationWarning
       >
         <PerformanceMonitor enabled={process.env.NODE_ENV === "production"}>
-          <SessionProvider>{children}</SessionProvider>
+          {children}
         </PerformanceMonitor>
       </body>
     </html>

@@ -32,137 +32,34 @@ import { Breadcrumbs, breadcrumbHelpers } from "@/components/seo/breadcrumbs";
 import { OptimizedImage } from "@/components/seo/optimized-image";
 
 interface PostClientProps {
-  slug: string;
+  post: BlogPost;
+  initialComments: Comment[];
 }
 
-export function PostClient({ slug }: PostClientProps) {
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+export function PostClient({ post, initialComments }: PostClientProps) {
+  const [comments, setComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
-  const [viewCount, setViewCount] = useState(0);
-  const [uniqueViewCount, setUniqueViewCount] = useState(0);
+  const [viewCount, setViewCount] = useState(post.viewCount);
+  const [uniqueViewCount, setUniqueViewCount] = useState(post.uniqueViewCount);
 
   useEffect(() => {
-    const loadData = async () => {
+    // Track view (only for published posts)
+    if (post.status === "published") {
       try {
-        const postResult = await getPostBySlug(slug);
-
-        if (!postResult.success || !postResult.data) {
-          notFound();
-        }
-
-        const postData = postResult.data;
-
-        // Now load comments with the actual post ID
-        const commentsResult = await getCommentsByPostId(postData.id);
-
-        // Transform the data to match BlogPost interface
-        const transformedPost: BlogPost = {
-          id: postData.id,
-          title: postData.title,
-          slug: postData.slug,
-          content: postData.content,
-          excerpt: postData.excerpt || "",
-          authorId: postData.authorId,
-          mainImage: postData.mainImage || "",
-          commentsEnabled: postData.commentsEnabled ?? true,
-          author: {
-            id: postData.author.id,
-            email: postData.author.email,
-            name: postData.author.name || "",
-            image: postData.author.image || "",
-          },
-          status: postData.status.toLowerCase() as
-            | "draft"
-            | "published"
-            | "archived",
-          categories: postData.categories.map((cat) => cat.name),
-          tags: postData.tags.map((tag) => tag.name),
-          seo: {
-            metaTitle: postData.metaTitle || postData.title,
-            metaDescription: postData.metaDescription || postData.excerpt || "",
-            canonicalUrl: postData.canonicalUrl || `/posts/${postData.slug}`,
-            openGraph: {
-              title: postData.ogTitle || postData.title,
-              description: postData.ogDescription || postData.excerpt || "",
-              image: postData.ogImage || "",
-              type: (postData.ogType as "article") || "article",
-            },
-            twitterCard: {
-              card: "summary",
-              title: postData.twitterTitle || postData.title,
-              description:
-                postData.twitterDescription || postData.excerpt || "",
-              image: postData.twitterImage || "",
-              creator: postData.twitterCreator || "",
-            },
-          },
-          publishedAt: postData.publishedAt || undefined,
-          createdAt: postData.createdAt,
-          updatedAt: postData.updatedAt,
-          readingTime: Math.ceil(postData.content.split(/\s+/).length / 200),
-          viewCount: postData.viewCount || 0,
-          uniqueViewCount: postData.uniqueViewCount || 0,
-          commentCount: postData._count?.comments || 0,
-        };
-
-        setPost(transformedPost);
-
-        // Transform comments
-        if (commentsResult.success && commentsResult.data) {
-          const transformedComments: Comment[] = commentsResult.data.map(
-            (comment) => ({
-              id: comment.id,
-              postId: comment.postId,
-              author: {
-                name: comment.authorName || "",
-                email: comment.authorEmail || "",
-                website: comment.authorUrl || null,
-                avatar: null,
-              },
-              content: comment.content,
-              status: comment.status.toLowerCase() as
-                | "pending"
-                | "approved"
-                | "rejected"
-                | "spam",
-              parentId: comment.parentId || undefined,
-              replies: [],
-              createdAt: comment.createdAt,
-              updatedAt: comment.updatedAt,
-              likes: 0,
-            }),
-          );
-          setComments(transformedComments);
-        }
-
-        // Track view (only for published posts)
-        if (postData.status === "PUBLISHED") {
-          try {
-            const viewResponse = await fetch(`/api/posts/${slug}/views`, {
-              method: "POST",
-            });
-            const viewResult = await viewResponse.json();
-            if (viewResult.success) {
-              setViewCount(viewResult.data.viewCount);
-              setUniqueViewCount(viewResult.data.uniqueViewCount);
-            }
-          } catch (viewError) {
-            console.error("Error tracking view:", viewError);
+        fetch(`/api/posts/${post.slug}/views`, {
+          method: "POST",
+        }).then(res => res.json()).then(viewResult => {
+          if (viewResult.success) {
+            setViewCount(viewResult.data.viewCount);
+            setUniqueViewCount(viewResult.data.uniqueViewCount);
           }
-        }
-      } catch (error) {
-        console.error("Error loading post:", error);
-        notFound();
-      } finally {
-        setLoading(false);
+        });
+      } catch (viewError) {
+        console.error("Error tracking view:", viewError);
       }
-    };
-
-    loadData();
-  }, [slug]);
+    }
+  }, [post.slug, post.status]);
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,32 +120,6 @@ export function PostClient({ slug }: PostClientProps) {
       }
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="mx-auto max-w-4xl px-4 py-8">
-          <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-muted rounded w-1/4"></div>
-            <div className="space-y-4">
-              <div className="h-12 bg-muted rounded"></div>
-              <div className="h-4 bg-muted rounded w-3/4"></div>
-            </div>
-            <div className="h-64 bg-muted rounded"></div>
-            <div className="space-y-2">
-              <div className="h-4 bg-muted rounded"></div>
-              <div className="h-4 bg-muted rounded"></div>
-              <div className="h-4 bg-muted rounded w-2/3"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!post) {
-    notFound();
-  }
 
   const baseUrl = getBaseUrl();
   const postUrl = `${baseUrl}/posts/${post.slug}`;

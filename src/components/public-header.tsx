@@ -112,10 +112,6 @@ export function PublicHeader() {
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               <span className="sr-only">Toggle theme</span>
             </Button>
-
-            <Button variant="default" className="bg-[var(--company-primary)] hover:bg-[var(--company-primary)]/90 text-white font-bold rounded-xl px-6" asChild>
-              <Link href="/admin">Dashboard</Link>
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -165,13 +161,6 @@ export function PublicHeader() {
               ))}
             </nav>
 
-            <div className="px-4 pt-6 border-t">
-              <Button className="w-full bg-[var(--company-primary)] font-bold py-6 rounded-2xl" asChild>
-                <Link href="/admin" onClick={closeMenu}>
-                  Admin Dashboard
-                </Link>
-              </Button>
-            </div>
           </motion.div>
         )}
       </div>
