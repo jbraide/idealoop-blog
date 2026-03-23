@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { hash, compare } from "bcryptjs";
 
 // Check if we're in a build environment
 const isBuildEnvironment =
@@ -696,9 +697,18 @@ export async function getAdminStats() {
     ] = await Promise.all([
       prisma.post.count(),
       prisma.post.count({ where: { status: "PUBLISHED" } }),
-      // For now, we'll use mock data for views/visitors
-      Promise.resolve(1200),
-      Promise.resolve(856),
+      prisma.post.aggregate({
+        _sum: {
+          viewCount: true,
+          uniqueViewCount: true,
+        },
+      }).then(agg => agg._sum.viewCount || 0),
+      prisma.post.aggregate({
+        _sum: {
+          viewCount: true,
+          uniqueViewCount: true,
+        },
+      }).then(agg => agg._sum.uniqueViewCount || 0),
       prisma.mediaFile.count(),
       prisma.comment.count(),
       prisma.comment.count({ where: { status: "PENDING" } }),
@@ -756,6 +766,56 @@ export async function getAdminStats() {
     return {
       success: false,
       error: "Failed to fetch admin statistics",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+export async function changePassword(data: {
+  userId: string;
+  currentPassword?: string;
+  newPassword: string;
+  isSelfService?: boolean;
+}) {
+  try {
+    const { userId, currentPassword, newPassword, isSelfService = true } = data;
+
+    if (!userId || !newPassword) {
+      return { success: false, error: "UserID and new password are required" };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+
+    // If it's self-service, verify the current password
+    if (isSelfService && user.password) {
+      if (!currentPassword) {
+        return { success: false, error: "Current password is required" };
+      }
+      const isValid = await compare(currentPassword, user.password);
+      if (!isValid) {
+        return { success: false, error: "Incorrect current password" };
+      }
+    }
+
+    // Hash and update
+    const hashedPassword = await hash(newPassword, 12);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+
+    return { success: true, message: "Password updated successfully" };
+  } catch (error) {
+    console.error("Change password error:", error);
+    return {
+      success: false,
+      error: "Failed to update password",
       message: error instanceof Error ? error.message : "Unknown error",
     };
   }

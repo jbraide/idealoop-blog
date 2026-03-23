@@ -13,6 +13,7 @@ import {
   Settings,
   Users,
   Tag,
+  KeyRound,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -66,6 +67,13 @@ const navigationItems = [
     icon: Users,
     description: "Manage team members",
     roles: ["ADMIN"],
+  },
+  {
+    name: "Security",
+    href: "/admin/profile",
+    icon: KeyRound,
+    description: "Update your password",
+    roles: ["ADMIN", "EDITOR"],
   },
   {
     name: "Settings",
