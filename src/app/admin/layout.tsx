@@ -8,11 +8,21 @@ import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { Toaster } from "sonner";
 
+import { SessionProvider } from "@/components/providers/session-provider";
+
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  return (
+    <SessionProvider>
+      <AdminContent>{children}</AdminContent>
+    </SessionProvider>
+  );
+}
+
+function AdminContent({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
