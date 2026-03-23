@@ -131,6 +131,9 @@ model Post {
   media    MediaFile[]
   views    PostView[]
 
+  @@index([status])
+  @@index([publishedAt])
+  @@index([authorId])
   @@map("posts")
 }
 

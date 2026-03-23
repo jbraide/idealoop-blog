@@ -117,6 +117,7 @@ export async function getPosts(
           twitterCreator: true,
           viewCount: true,
           uniqueViewCount: true,
+          keywords: true,
           author: {
             select: {
               id: true,
@@ -201,28 +202,61 @@ export async function getPostBySlug(slug: string) {
         slug,
         status: "PUBLISHED",
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        content: true,
+        excerpt: true,
+        mainImage: true,
+        commentsEnabled: true,
+        status: true,
+        publishedAt: true,
+        authorId: true,
+        createdAt: true,
+        updatedAt: true,
+        viewCount: true,
+        uniqueViewCount: true,
+        keywords: true,
         author: {
           select: {
             id: true,
             name: true,
-            email: true,
             image: true,
+            email: true,
           },
         },
-        categories: true,
-        tags: true,
+        categories: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            color: true,
+          },
+        },
+        tags: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
         comments: {
           where: {
             status: "APPROVED",
             parentId: null,
           },
-          include: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            authorName: true,
+            authorEmail: true,
+            authorUrl: true,
             user: {
               select: {
                 id: true,
                 name: true,
-                email: true,
                 image: true,
               },
             },
@@ -230,12 +264,17 @@ export async function getPostBySlug(slug: string) {
               where: {
                 status: "APPROVED",
               },
-              include: {
+              select: {
+                id: true,
+                content: true,
+                createdAt: true,
+                authorName: true,
+                authorEmail: true,
+                authorUrl: true,
                 user: {
                   select: {
                     id: true,
                     name: true,
-                    email: true,
                     image: true,
                   },
                 },
@@ -249,6 +288,18 @@ export async function getPostBySlug(slug: string) {
             createdAt: "desc",
           },
         },
+        metaTitle: true,
+        metaDescription: true,
+        canonicalUrl: true,
+        ogTitle: true,
+        ogDescription: true,
+        ogImage: true,
+        ogType: true,
+        twitterCard: true,
+        twitterTitle: true,
+        twitterDescription: true,
+        twitterImage: true,
+        twitterCreator: true,
         _count: {
           select: {
             comments: {

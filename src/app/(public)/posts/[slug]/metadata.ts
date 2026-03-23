@@ -55,7 +55,7 @@ export async function generateMetadata({
         images: seo.openGraph.image ? [{ url: seo.openGraph.image }] : [],
         type: "article",
         publishedTime: post.publishedAt?.toISOString(),
-        modifiedTime: post.updatedAt.toISOString(),
+        modifiedTime: post.updatedAt?.toISOString(),
         authors: post.author.name ? [post.author.name] : [],
       },
       twitter: {

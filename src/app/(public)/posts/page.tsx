@@ -19,6 +19,7 @@ import {
   Search,
   Filter,
   ArrowLeft,
+  ArrowRight,
   BookOpen,
 } from "lucide-react";
 import Link from "next/link";
@@ -34,12 +35,19 @@ export default function PostsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [companySettings, setCompanySettings] = useState({
+    companyName: "Idealoop",
+    companyDescription: "Insights for Product-Led Growth",
+    primaryColor: "#4F46E5",
+    secondaryColor: "#0F172A",
+    accentColor: "#10B981",
+  });
   const postsPerPage = 9;
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [postsResult, categoriesResult] = await Promise.all([
+        const [postsResult, categoriesResult, companyResponse] = await Promise.all([
           getPosts({
             status: ["published"],
             category: selectedCategory || undefined,
@@ -48,10 +56,10 @@ export default function PostsPage() {
             limit: postsPerPage,
           }),
           getCategories(),
+          fetch("/api/company-settings"),
         ]);
 
         if (postsResult.success && postsResult.data) {
-          // Transform the data to match BlogPost interface
           const transformedPosts: BlogPost[] = postsResult.data.posts.map(
             (post) => ({
               id: post.id,
@@ -68,10 +76,7 @@ export default function PostsPage() {
                 image: post.author.image || "",
                 role: "admin",
               },
-              status: post.status.toLowerCase() as
-                | "draft"
-                | "published"
-                | "archived",
+              status: post.status.toLowerCase() as "draft" | "published" | "archived",
               categories: post.categories.map((cat) => cat.name),
               tags: post.tags.map((tag) => tag.name),
               seo: {
@@ -96,8 +101,8 @@ export default function PostsPage() {
               createdAt: post.createdAt,
               updatedAt: post.updatedAt,
               readingTime: Math.ceil(post.content.split(/\s+/).length / 200),
-              viewCount: 0,
-              uniqueViewCount: 0,
+              viewCount: post.viewCount || 0,
+              uniqueViewCount: post.uniqueViewCount || 0,
               commentCount: post._count?.comments || 0,
             }),
           );
@@ -120,6 +125,11 @@ export default function PostsPage() {
           );
           setCategories(transformedCategories);
         }
+
+        if (companyResponse.ok) {
+          const companyData = await companyResponse.json();
+          setCompanySettings(companyData);
+        }
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -129,11 +139,6 @@ export default function PostsPage() {
 
     loadData();
   }, [searchQuery, selectedCategory, currentPage]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1);
-  };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category === selectedCategory ? "" : category);
@@ -147,242 +152,226 @@ export default function PostsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b">
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <Button variant="ghost" asChild className="gap-2 mb-4">
+    <div
+      className="min-h-screen bg-background"
+      style={{
+        "--company-primary": companySettings.primaryColor,
+        "--company-secondary": companySettings.secondaryColor,
+        "--company-accent": companySettings.accentColor,
+      } as React.CSSProperties}
+    >
+      {/* Header Section */}
+      <section className="relative py-20 overflow-hidden border-b border-muted">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--company-primary),transparent_50%)] opacity-[0.02]"></div>
+        <div className="relative z-10 mx-auto max-w-7xl px-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="max-w-2xl text-left">
+              <Button variant="ghost" asChild className="gap-2 mb-6 -ml-4 hover:bg-transparent">
                 <Link href="/">
                   <ArrowLeft className="h-4 w-4" />
-                  Back to Home
+                  Back to Overview
                 </Link>
               </Button>
-              <h1 className="text-4xl font-bold tracking-tight text-foreground">
-                All Articles
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl mb-4">
+                The <span className="text-[var(--company-primary)]">Library</span> of Insights
               </h1>
-              <p className="mt-2 text-lg text-muted-foreground">
-                Browse our complete collection of articles and tutorials
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Explore deep dives into building customer-driven products and scaling startups.
               </p>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Search and Filters */}
-      <div className="border-b bg-muted/30">
-        <div className="mx-auto max-w-7xl px-4 py-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            {/* Search */}
-            <form onSubmit={handleSearch} className="flex-1 max-w-md">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
+            <div className="flex-shrink-0">
+              <div className="relative group w-full md:w-80">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground group-focus-within:text-[var(--company-primary)] transition-colors" />
+                <input
                   type="text"
                   placeholder="Search articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="w-full rounded-xl border border-muted bg-card pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--company-primary)]/20 focus:border-[var(--company-primary)] transition-all shadow-sm"
                 />
               </div>
-            </form>
-
-            {/* Category Filters */}
-            <div className="flex flex-wrap gap-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Filter className="h-4 w-4" />
-                <span>Filter by:</span>
-              </div>
-              <Button
-                variant={selectedCategory === "" ? "default" : "outline"}
-                size="sm"
-                onClick={() => handleCategoryChange("")}
-              >
-                All
-              </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  variant={
-                    selectedCategory === category.name ? "default" : "outline"
-                  }
-                  size="sm"
-                  onClick={() => handleCategoryChange(category.name)}
-                >
-                  {category.name}
-                </Button>
-              ))}
             </div>
-
-            {/* Clear Filters */}
-            {(searchQuery || selectedCategory) && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                className="text-muted-foreground"
-              >
-                Clear all
-              </Button>
-            )}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Posts Grid */}
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        {loading ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader>
-                  <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-muted rounded w-full"></div>
-                  <div className="h-3 bg-muted rounded w-2/3"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-20 bg-muted rounded"></div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <>
-            {/* Results Count */}
-            <div className="mb-6 flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
-                Showing {posts.length} articles
-                {selectedCategory && ` in "${selectedCategory}"`}
-                {searchQuery && ` matching "${searchQuery}"`}
-              </p>
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-4 py-12">
+        <div className="grid lg:grid-cols-4 gap-12">
+          {/* Sidebar Filters */}
+          <aside className="lg:col-span-1 space-y-10 text-left">
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--company-primary)] mb-6">Categories</h3>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleCategoryChange("")}
+                  className={cn(
+                    "w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center justify-between group",
+                    selectedCategory === ""
+                      ? "bg-[var(--company-primary)] text-white shadow-md shadow-[var(--company-primary)]/20"
+                      : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <span>All Articles</span>
+                  <span className={cn("text-xs px-2 py-0.5 rounded-full", selectedCategory === "" ? "bg-white/20" : "bg-muted text-muted-foreground")}>
+                    {posts.length}
+                  </span>
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => handleCategoryChange(category.name)}
+                    className={cn(
+                      "w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center justify-between group",
+                      selectedCategory === category.name
+                        ? "bg-[var(--company-primary)] text-white shadow-md shadow-[var(--company-primary)]/20"
+                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    <span className="truncate">{category.name}</span>
+                    <span className={cn("text-xs px-2 py-0.5 rounded-full", selectedCategory === category.name ? "bg-white/20" : "bg-muted text-muted-foreground")}>
+                      {category.postCount}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Posts Grid */}
-            {posts.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {posts.map((post, index) => (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                  >
-                    <Card className="group h-full cursor-pointer transition-all hover:shadow-lg">
-                      <Link href={`/posts/${post.slug}`}>
-                        {post.mainImage && (
-                          <div className="relative aspect-video w-full overflow-hidden">
-                            <img
-                              src={post.mainImage}
-                              alt={post.title}
-                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                            />
-                          </div>
-                        )}
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                            <Calendar className="h-3 w-3" />
-                            <span>{formatDate(post.publishedAt!)}</span>
-                            <Clock className="h-3 w-3 ml-2" />
-                            <span>{formatReadingTime(post.readingTime)}</span>
-                          </div>
-                          <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">
-                            {post.title}
-                          </CardTitle>
-                          <CardDescription className="line-clamp-2">
-                            {post.excerpt}
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <Eye className="h-3 w-3" />
-                              <span>{post.viewCount} views</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              {post.categories
-                                .slice(0, 2)
-                                .map((category, i) => (
-                                  <span
-                                    key={i}
-                                    className="inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary"
-                                  >
-                                    <Tag className="h-2 w-2 mr-1" />
-                                    {category}
-                                  </span>
-                                ))}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Link>
-                    </Card>
-                  </motion.div>
+            <div className="rounded-2xl bg-[var(--company-secondary)] p-6 text-white overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--company-primary)] opacity-20 rounded-full -mr-12 -mt-12"></div>
+              <h4 className="font-bold text-lg mb-3 relative z-10">Subscribe</h4>
+              <p className="text-sm text-white/70 mb-6 relative z-10">Get the latest product insights delivered to your inbox.</p>
+              <div className="space-y-3 relative z-10">
+                <input
+                  type="email"
+                  placeholder="name@email.com"
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+                />
+                <Button className="w-full bg-white text-[var(--company-secondary)] hover:bg-white/90 font-bold">Join Newsletter</Button>
+              </div>
+            </div>
+          </aside>
+
+          {/* Grid Area */}
+          <main className="lg:col-span-3">
+            {loading ? (
+              <div className="grid gap-8 md:grid-cols-2">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-96 rounded-2xl bg-muted animate-pulse"></div>
                 ))}
               </div>
             ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-16"
-              >
-                <BookOpen className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
-                <h3 className="text-xl font-medium text-foreground mb-2">
-                  No articles found
-                </h3>
-                <p className="text-muted-foreground mb-6">
-                  {searchQuery || selectedCategory
-                    ? "Try adjusting your search terms or filters"
-                    : "Check back soon for new content"}
-                </p>
-                {(searchQuery || selectedCategory) && (
-                  <Button onClick={clearFilters}>Clear filters</Button>
+              <>
+                {posts.length > 0 ? (
+                  <>
+                    <div className="grid gap-8 md:grid-cols-2">
+                      {posts.map((post, index) => (
+                        <motion.div
+                          key={post.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, delay: index * 0.05 }}
+                        >
+                          <Card className="group flex flex-col h-full border-none shadow-sm hover:shadow-xl transition-all duration-300 rounded-3xl overflow-hidden bg-card">
+                            <Link href={`/posts/${post.slug}`} className="relative h-60 overflow-hidden">
+                              {post.mainImage ? (
+                                <img
+                                  src={post.mainImage}
+                                  alt={post.title}
+                                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-[var(--company-primary)]/5 flex items-center justify-center">
+                                  <BookOpen className="w-12 h-12 text-[var(--company-primary)]/20" />
+                                </div>
+                              )}
+                              <div className="absolute top-4 left-4">
+                                <span className="px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wider bg-white/90 dark:bg-black/90 text-foreground shadow-lg backdrop-blur-sm">
+                                  {post.categories[0] || "General"}
+                                </span>
+                              </div>
+                            </Link>
+                            <CardHeader className="flex-1 space-y-4 pt-8 px-8 text-left">
+                              <div className="flex items-center gap-3 text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
+                                <span>{formatDate(post.publishedAt!)}</span>
+                                <span className="text-[var(--company-primary)]">•</span>
+                                <span>{formatReadingTime(post.readingTime)}</span>
+                              </div>
+                              <Link href={`/posts/${post.slug}`}>
+                                <CardTitle className="text-2xl leading-tight group-hover:text-[var(--company-primary)] transition-colors line-clamp-2">
+                                  {post.title}
+                                </CardTitle>
+                              </Link>
+                              <CardDescription className="line-clamp-3 text-base leading-relaxed">
+                                {post.excerpt}
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent className="pt-0 pb-8 px-8 flex items-center justify-between">
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
+                                <Eye className="h-4 w-4" />
+                                <span>{post.viewCount}</span>
+                              </div>
+                              <Link href={`/posts/${post.slug}`} className="inline-flex items-center text-sm font-bold text-[var(--company-primary)] group/link">
+                                Read Story <ArrowRight className="ml-2 w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                              </Link>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div className="mt-16 flex items-center justify-center gap-3">
+                        <Button
+                          variant="ghost"
+                          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                          disabled={currentPage === 1}
+                          className="rounded-xl"
+                        >
+                          <ArrowLeft className="mr-2 h-4 w-4" /> Prev
+                        </Button>
+                        <div className="flex items-center gap-2">
+                          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                            <Button
+                              key={page}
+                              variant={currentPage === page ? "default" : "ghost"}
+                              onClick={() => setCurrentPage(page)}
+                              className={cn(
+                                "w-10 h-10 rounded-xl font-bold",
+                                currentPage === page ? "bg-[var(--company-primary)] shadow-lg shadow-[var(--company-primary)]/25" : ""
+                              )}
+                            >
+                              {page}
+                            </Button>
+                          ))}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                          disabled={currentPage === totalPages}
+                          className="rounded-xl"
+                        >
+                          Next <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center py-24 bg-muted/20 rounded-3xl border-2 border-dashed border-muted">
+                    <BookOpen className="mx-auto h-16 w-16 text-muted-foreground mb-6" />
+                    <h3 className="text-2xl font-bold mb-2">No matching stories</h3>
+                    <p className="text-muted-foreground mb-8 max-w-sm mx-auto">
+                      We couldn't find any articles matching your current search or category filter.
+                    </p>
+                    <Button onClick={clearFilters} variant="outline" className="rounded-xl px-8">Reset All Filters</Button>
+                  </div>
                 )}
-              </motion.div>
+              </>
             )}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-12 flex items-center justify-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </Button>
-
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <Button
-                        key={page}
-                        variant={currentPage === page ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setCurrentPage(page)}
-                      >
-                        {page}
-                      </Button>
-                    ),
-                  )}
-                </div>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </Button>
-              </div>
-            )}
-          </>
-        )}
+          </main>
+        </div>
       </div>
     </div>
   );

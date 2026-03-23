@@ -14,22 +14,23 @@ import {
   Instagram,
   ArrowUp,
   BookOpen,
+  Building2,
 } from "lucide-react";
 import { getCompanyInitials } from "@/lib/company-settings";
 
 export function PublicFooter() {
   const [companySettings, setCompanySettings] = useState({
-    companyName: "Modern Blog",
-    companyDescription: "A beautiful, fast, and modern blog built with Next.js",
-    companyEmail: "",
+    companyName: "Idealoop",
+    companyDescription: "Insights for Product-Led Growth",
+    companyEmail: "hello@idealoop.xyz",
     companyPhone: "",
     companyAddress: "",
     companyLogo: "",
-    primaryColor: "#2563EB",
-    secondaryColor: "#1E293B",
-    accentColor: "#059669",
-    twitterUrl: "",
-    linkedinUrl: "",
+    primaryColor: "#4F46E5",
+    secondaryColor: "#0F172A",
+    accentColor: "#10B981",
+    twitterUrl: "https://twitter.com/idealoop",
+    linkedinUrl: "https://linkedin.com/company/idealoop",
     githubUrl: "",
     instagramUrl: "",
   });
@@ -62,18 +63,17 @@ export function PublicFooter() {
   };
 
   const navigation = [
-    { name: "Home", href: "/" },
-    { name: "Articles", href: "/posts" },
-    { name: "Categories", href: "/categories" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+    { name: "Latest Articles", href: "/posts" },
+    { name: "Trending Categories", href: "/categories" },
+    { name: "Our Story", href: "/about" },
+    { name: "Contact Support", href: "/contact" },
   ];
 
   const currentYear = new Date().getFullYear();
 
   return (
     <footer
-      className="bg-[var(--company-secondary)] text-white"
+      className="bg-[var(--company-secondary)] text-white relative overflow-hidden"
       style={
         {
           "--company-primary": companySettings.primaryColor,
@@ -82,6 +82,8 @@ export function PublicFooter() {
         } as React.CSSProperties
       }
     >
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--company-primary)] opacity-[0.03] rounded-full -mr-64 -mt-64 blur-3xl"></div>
+
       {/* Scroll to top button */}
       {showScrollTop && (
         <motion.button
@@ -89,88 +91,56 @@ export function PublicFooter() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-[var(--company-primary)] text-white shadow-lg hover:bg-[var(--company-primary)]/90 transition-colors"
+          className="fixed bottom-8 right-8 z-50 p-4 rounded-2xl bg-[var(--company-primary)] text-white shadow-2xl hover:bg-[var(--company-primary)]/90 transition-all hover:-translate-y-1"
         >
           <ArrowUp className="h-5 w-5" />
         </motion.button>
       )}
 
-      <div className="mx-auto max-w-7xl px-4 py-16">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-4 py-24 relative z-10">
+        <div className="grid gap-16 lg:grid-cols-12">
           {/* Brand Section */}
-          <div className="space-y-4">
+          <div className="lg:col-span-5 space-y-8 text-left">
             <div className="flex items-center gap-3">
-              {companySettings.companyLogo ? (
-                <img
-                  src={companySettings.companyLogo}
-                  alt={companySettings.companyName}
-                  className="h-10 w-10 object-contain"
-                />
-              ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--company-primary)] text-white font-semibold">
-                  {getCompanyInitials(companySettings.companyName)}
-                </div>
-              )}
-              <span className="text-xl font-bold">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-white font-black text-xl">
+                <Building2 className="h-6 w-6" />
+              </div>
+              <span className="text-2xl font-black tracking-tighter">
                 {companySettings.companyName}
               </span>
             </div>
-            <p className="text-white/70 leading-relaxed">
+            <p className="text-white/60 leading-relaxed text-lg max-w-md">
               {companySettings.companyDescription}
             </p>
-            <div className="flex gap-3">
-              {companySettings.twitterUrl && (
+            <div className="flex gap-4">
+              {[
+                { icon: Twitter, url: companySettings.twitterUrl },
+                { icon: Linkedin, url: companySettings.linkedinUrl },
+                { icon: Github, url: companySettings.githubUrl },
+                { icon: Instagram, url: companySettings.instagramUrl },
+              ].filter(s => s.url).map((social, i) => (
                 <a
-                  href={companySettings.twitterUrl}
+                  key={i}
+                  href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  className="p-3 rounded-xl bg-white/5 hover:bg-[var(--company-primary)] transition-all hover:-translate-y-1"
                 >
-                  <Twitter className="h-4 w-4" />
+                  <social.icon className="h-5 w-5" />
                 </a>
-              )}
-              {companySettings.linkedinUrl && (
-                <a
-                  href={companySettings.linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                >
-                  <Linkedin className="h-4 w-4" />
-                </a>
-              )}
-              {companySettings.githubUrl && (
-                <a
-                  href={companySettings.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                >
-                  <Github className="h-4 w-4" />
-                </a>
-              )}
-              {companySettings.instagramUrl && (
-                <a
-                  href={companySettings.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                >
-                  <Instagram className="h-4 w-4" />
-                </a>
-              )}
+              ))}
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Quick Links</h3>
-            <nav className="space-y-2">
+          <div className="lg:col-span-2 space-y-6 text-left">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--company-primary)]">Product</h3>
+            <nav className="flex flex-col gap-4">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block text-white/70 hover:text-white transition-colors"
+                  className="text-white/60 hover:text-white transition-colors font-medium"
                 >
                   {item.name}
                 </Link>
@@ -178,97 +148,37 @@ export function PublicFooter() {
             </nav>
           </div>
 
-          {/* Contact Info */}
-          {(companySettings.companyEmail ||
-            companySettings.companyPhone ||
-            companySettings.companyAddress) && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Contact</h3>
-              <div className="space-y-3">
-                {companySettings.companyEmail && (
-                  <div className="flex items-center gap-3 text-white/70">
-                    <Mail className="h-4 w-4" />
-                    <a
-                      href={`mailto:${companySettings.companyEmail}`}
-                      className="hover:text-white transition-colors"
-                    >
-                      {companySettings.companyEmail}
-                    </a>
-                  </div>
-                )}
-                {companySettings.companyPhone && (
-                  <div className="flex items-center gap-3 text-white/70">
-                    <Phone className="h-4 w-4" />
-                    <a
-                      href={`tel:${companySettings.companyPhone}`}
-                      className="hover:text-white transition-colors"
-                    >
-                      {companySettings.companyPhone}
-                    </a>
-                  </div>
-                )}
-                {companySettings.companyAddress && (
-                  <div className="flex items-start gap-3 text-white/70">
-                    <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <span>{companySettings.companyAddress}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
           {/* Newsletter Signup */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Stay Updated</h3>
-            <p className="text-white/70">
-              Subscribe to our newsletter for the latest updates and articles.
-            </p>
-            <div className="space-y-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[var(--company-primary)]"
-              />
-              <Button className="w-full bg-[var(--company-primary)] hover:bg-[var(--company-primary)]/90">
-                Subscribe
-              </Button>
+          <div className="lg:col-span-5 space-y-8 text-left">
+            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 space-y-6">
+              <h3 className="text-xl font-bold">Deep dives into product growth</h3>
+              <p className="text-white/60">
+                Join 2,400+ product managers getting weekly insights on product-led growth.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-5 py-3 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[var(--company-primary)] transition-all"
+                />
+                <Button className="bg-[var(--company-primary)] hover:bg-[var(--company-primary)]/90 text-white font-bold px-8 h-auto py-4 rounded-2xl">
+                  Subscribe
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/20">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-white/70 text-sm">
-              © {currentYear} {companySettings.companyName}. All rights
-              reserved.
-            </p>
-            <div className="flex items-center gap-6 text-sm text-white/70">
-              <Link
-                href="/privacy"
-                className="hover:text-white transition-colors"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms"
-                className="hover:text-white transition-colors"
-              >
-                Terms of Service
-              </Link>
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-                className="text-white/70 hover:text-white hover:bg-white/10"
-              >
-                <Link href="/admin">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Admin
-                </Link>
-              </Button>
-            </div>
+        <div className="mt-24 pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex flex-wrap justify-center gap-8 text-sm font-bold text-white/40">
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/sitemap.xml" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
+          <p className="text-white/40 text-sm font-medium">
+            © {currentYear} {companySettings.companyName}. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

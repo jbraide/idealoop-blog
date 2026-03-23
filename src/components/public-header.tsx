@@ -7,15 +7,16 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Menu, Moon, Search, Sun, X, Building2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { getCompanyInitials } from "@/lib/company-settings";
+import { cn } from "@/lib/utils";
 
 export function PublicHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [companySettings, setCompanySettings] = useState({
-    companyName: "Modern Blog",
+    companyName: "Idealoop",
     companyLogo: "",
-    primaryColor: "#2563EB",
-    secondaryColor: "#1E293B",
-    accentColor: "#059669",
+    primaryColor: "#4F46E5",
+    secondaryColor: "#0F172A",
+    accentColor: "#10B981",
   });
   const { theme, setTheme } = useTheme();
 
@@ -36,7 +37,6 @@ export function PublicHeader() {
   }, []);
 
   const navigation = [
-    { name: "Home", href: "/" },
     { name: "Articles", href: "/posts" },
     { name: "Categories", href: "/categories" },
     { name: "About", href: "/about" },
@@ -48,7 +48,7 @@ export function PublicHeader() {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60"
       style={
         {
           "--company-primary": companySettings.primaryColor,
@@ -57,39 +57,43 @@ export function PublicHeader() {
         } as React.CSSProperties
       }
     >
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <Link
               href="/"
-              className="flex items-center gap-2 text-xl font-bold text-foreground"
+              className="flex items-center gap-3 text-2xl font-black tracking-tighter text-foreground group"
               onClick={closeMenu}
             >
               {companySettings.companyLogo ? (
                 <img
                   src={companySettings.companyLogo}
                   alt={companySettings.companyName}
-                  className="h-8 w-8 object-contain"
+                  className="h-9 w-9 object-contain"
                 />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--company-primary)] text-white">
-                  {getCompanyInitials(companySettings.companyName)}
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--company-primary)] to-[var(--company-accent)] text-white shadow-lg shadow-[var(--company-primary)]/20 group-hover:scale-105 transition-transform">
+                  <Building2 className="h-5 w-5" />
                 </div>
               )}
               <span className="hidden sm:block">
-                {companySettings.companyName}
+                {companySettings.companyName.split("").map((char, i) => (
+                  <span key={i} className={cn(i >= 4 ? "text-[var(--company-primary)]" : "")}>
+                    {char}
+                  </span>
+                ))}
               </span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-1">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
+                className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-lg transition-all"
               >
                 {item.name}
               </Link>
@@ -97,54 +101,45 @@ export function PublicHeader() {
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* Search Button */}
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-              <Search className="h-4 w-4" />
-            </Button>
-
-            {/* Theme Toggle */}
+          <div className="hidden md:flex items-center gap-3">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="h-9 w-9"
+              className="h-10 w-10 rounded-xl"
             >
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               <span className="sr-only">Toggle theme</span>
             </Button>
 
-            {/* Admin Login */}
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/admin">Admin</Link>
+            <Button variant="default" className="bg-[var(--company-primary)] hover:bg-[var(--company-primary)]/90 text-white font-bold rounded-xl px-6" asChild>
+              <Link href="/admin">Dashboard</Link>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden">
-            {/* Theme Toggle - Mobile */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="h-9 w-9"
+              className="h-10 w-10 rounded-xl"
             >
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
 
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleMenu}
-              className="h-9 w-9"
+              className="h-10 w-10 rounded-xl"
             >
               {isMenuOpen ? (
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               ) : (
-                <Menu className="h-4 w-4" />
+                <Menu className="h-5 w-5" />
               )}
             </Button>
           </div>
@@ -153,42 +148,30 @@ export function PublicHeader() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden border-t py-6 space-y-6 bg-background"
           >
-            <nav className="py-4 space-y-4">
+            <nav className="flex flex-col gap-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block text-sm font-medium text-foreground/70 hover:text-foreground transition-colors py-2"
+                  className="px-4 py-3 text-lg font-bold text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all"
                   onClick={closeMenu}
                 >
                   {item.name}
                 </Link>
               ))}
-
-              {/* Mobile Actions */}
-              <div className="pt-4 border-t space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                  asChild
-                >
-                  <Link href="/admin" onClick={closeMenu}>
-                    <BookOpen className="h-4 w-4" />
-                    Admin Dashboard
-                  </Link>
-                </Button>
-
-                <Button variant="ghost" className="w-full justify-start gap-2">
-                  <Search className="h-4 w-4" />
-                  Search Articles
-                </Button>
-              </div>
             </nav>
+
+            <div className="px-4 pt-6 border-t">
+              <Button className="w-full bg-[var(--company-primary)] font-bold py-6 rounded-2xl" asChild>
+                <Link href="/admin" onClick={closeMenu}>
+                  Admin Dashboard
+                </Link>
+              </Button>
+            </div>
           </motion.div>
         )}
       </div>
