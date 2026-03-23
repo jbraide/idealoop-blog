@@ -201,10 +201,10 @@ export function CKEditorComponent({
       <CKEditor
         editor={ClassicEditor as any}
         data={content}
-        onReady={(editor) => {
+        onReady={(editor: any) => {
           setEditorInstance(editor);
           // Configure the editor when it's ready
-          editor.editing.view.change((writer) => {
+          editor.editing.view.change((writer: any) => {
             writer.setStyle(
               "min-height",
               "400px",
@@ -212,7 +212,7 @@ export function CKEditorComponent({
             );
           });
         }}
-        onChange={(event, editor) => {
+        onChange={(event: any, editor: any) => {
           const data = editor.getData();
           onChange(data);
         }}
