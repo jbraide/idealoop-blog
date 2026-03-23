@@ -297,6 +297,19 @@ export function PostClient({ post, initialComments }: PostClientProps) {
                     margin-bottom: 1rem;
                     letter-spacing: -0.02em;
                   }
+                  .post-content-container a {
+                    color: hsl(var(--primary));
+                    font-weight: 800;
+                    text-decoration: none;
+                    border-bottom: 2px solid hsl(var(--primary) / 0.3);
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                  }
+                  .post-content-container a:hover {
+                    border-bottom-color: hsl(var(--primary));
+                    color: hsl(var(--primary) / 0.9);
+                    background: hsl(var(--primary) / 0.05);
+                    border-radius: 4px;
+                  }
                   .post-content-container p {
                     margin-bottom: 1.5rem;
                   }
