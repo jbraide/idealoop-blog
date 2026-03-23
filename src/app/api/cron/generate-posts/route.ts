@@ -20,18 +20,28 @@ export async function GET(request: NextRequest) {
     try {
         // 2. Get next topic (manual override or next uncompleted)
         const topicNumber = request.nextUrl.searchParams.get("topicNumber");
+        console.log(`LOG: Requested topicNumber: ${topicNumber}`);
         let topics;
 
         if (topicNumber) {
             const allTopics = getNextTopics(200);
+            console.log(`LOG: Total topics checked: ${allTopics.length}`);
             const topic = allTopics.find(t => t.number === parseInt(topicNumber));
+            console.log(`LOG: Found specific topic: ${topic ? JSON.stringify(topic) : "NONE"}`);
             topics = topic ? [topic] : [];
         } else {
             topics = getNextTopics(1);
+            console.log(`LOG: Auto-picked next topic: ${JSON.stringify(topics[0])}`);
         }
 
         if (topics.length === 0) {
-            return NextResponse.json({ message: "No suitable topic found" });
+            return NextResponse.json({
+                message: "No suitable topic found",
+                debug: {
+                    requestedNumber: topicNumber,
+                    availableTopics: getNextTopics(200).map(t => t.number)
+                }
+            });
         }
 
         // 3. Find first Admin user for author assignment

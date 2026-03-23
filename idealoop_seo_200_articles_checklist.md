@@ -7,7 +7,7 @@
 -   [x] 3. Best Product Feedback Tools for Startups
 -   [x] 4. Product Feedback vs Customer Feedback
 -   [x] 5. 10 Ways to Collect Feedback From Your Users
--   [ ] 6. How to Turn User Feedback Into Product Features
+-   [x] 6. How to Turn User Feedback Into Product Features
 -   [ ] 7. How Successful SaaS Companies Use Customer Feedback
 -   [ ] 8. Product Feedback Examples From Top Startups
 -   [ ] 9. The Best Feedback Collection Methods for SaaS

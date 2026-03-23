@@ -21,11 +21,14 @@ export async function generatePost(title: string): Promise<GeneratedPost> {
     
     Requirements:
     1. Content: Write comprehensive, engaging content (minimum 1000 words). Use HTML tags for formatting (h2, h3, p, ul, li, strong) as this will be used in a rich text editor.
-    2. Excerpt: A 2-3 sentence summary of the post.
-    3. Slug: A URL-friendly slug based on the title.
-    4. SEO Meta Title: A compelling title for search engines (max 60 chars).
-    5. SEO Meta Description: A descriptive meta description (max 160 chars).
-    6. Keywords: A comma-separated list of relevant keywords.
+    2. Linking Strategy:
+       - When mentioning "Idealoop", include a link to https://idealoop.xyz or https://app.idealoop.xyz where appropriate.
+       - When mentioning competitors (e.g., Canny, Upvoty, Featurebase, Productboard), include a link to their respective websites to provide value and context.
+    3. Excerpt: A 2-3 sentence summary of the post.
+    4. Slug: A URL-friendly slug based on the title.
+    5. SEO Meta Title: A compelling title for search engines (max 60 chars).
+    6. SEO Meta Description: A descriptive meta description (max 160 chars).
+    7. Keywords: A comma-separated list of relevant keywords.
     
     Respond STRICTLY with a JSON object in this format:
     {
