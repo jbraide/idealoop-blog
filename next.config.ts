@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["@prisma/client", "pg"],
+  turbopack: {}, // Clear error for webpack configuration in Next.js 16
   images: {
     remotePatterns: [
       {
