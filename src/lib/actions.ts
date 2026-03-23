@@ -748,7 +748,7 @@ export async function getAdminStats() {
         id: post.id,
         title: post.title,
         status: post.status.toLowerCase(),
-        views: 0, // Mock data for now
+        views: post.viewCount,
         publishedAt: post.publishedAt
           ? new Date(post.publishedAt).toLocaleDateString()
           : "In draft",
