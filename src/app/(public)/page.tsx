@@ -168,23 +168,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-grid-slate-900/[0.02] bg-[bottom_1px_center] dark:bg-grid-slate-400/[0.02]"></div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <span className="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wide uppercase rounded-full bg-[var(--company-primary)]/10 text-[var(--company-primary)] border border-[var(--company-primary)]/20">
-              The Product Management Blog
-            </span>
-            <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl mb-6">
-              Insights for <span className="text-[var(--company-primary)]">Product-Led</span> Growth
-            </h1>
-            <p className="mx-auto max-w-2xl text-xl text-muted-foreground leading-relaxed">
-              {companySettings.companyDescription}
-            </p>
-          </motion.div>
-
           {/* Featured Post */}
           {!loading && posts.length > 0 && (
             <motion.div
