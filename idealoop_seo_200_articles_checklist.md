@@ -10,14 +10,14 @@
 -   [x] 6. How to Turn User Feedback Into Product Features
 -   [x] 7. How Successful SaaS Companies Use Customer Feedback
 -   [x] 8. Product Feedback Examples From Top Startups
--   [ ] 9. The Best Feedback Collection Methods for SaaS
--   [ ] 10. How to Analyze Product Feedback
--   [ ] 11. Customer Feedback Tools Compared
--   [ ] 12. How to Build a Feedback Loop With Your Customers
--   [ ] 13. Why Ignoring User Feedback Kills Products
--   [ ] 14. Product Feedback Management Guide
--   [ ] 15. Qualitative vs Quantitative Product Feedback
--   [ ] 16. How to Ask Users for Feedback Without Annoying Them
+-   [x] 9. The Best Feedback Collection Methods for SaaS
+-   [x] 10. How to Analyze Product Feedback
+-   [x] 11. Customer Feedback Tools Compared
+-   [x] 12. How to Build a Feedback Loop With Your Customers
+-   [x] 13. Why Ignoring User Feedback Kills Products
+-   [x] 14. Product Feedback Management Guide
+-   [x] 15. Qualitative vs Quantitative Product Feedback
+-   [x] 16. How to Ask Users for Feedback Without Annoying Them
 -   [ ] 17. Feedback Widgets Explained
 -   [ ] 18. The Best Ways to Ask for Feature Requests
 -   [ ] 19. How to Organize Customer Feedback

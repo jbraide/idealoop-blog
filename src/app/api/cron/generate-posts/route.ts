@@ -30,8 +30,9 @@ export async function GET(request: NextRequest) {
             console.log(`LOG: Found specific topic: ${topic ? JSON.stringify(topic) : "NONE"}`);
             topics = topic ? [topic] : [];
         } else {
-            topics = await getNextTopics(1);
-            console.log(`LOG: Auto-picked next topic: ${JSON.stringify(topics[0])}`);
+            // Fetch up to 5 topics to generate concurrently
+            topics = await getNextTopics(5);
+            console.log(`LOG: Auto-picked next topics:`, topics.map(t => t.title));
         }
 
         if (topics.length === 0) {
@@ -53,10 +54,10 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "No Admin user found to assign as author" }, { status: 500 });
         }
 
-        const results = [];
+        // 4. Generate and save posts concurrently
+        console.log(`Starting generation for ${topics.length} topics concurrently...`);
 
-        // 4. Generate and save posts
-        for (const topic of topics) {
+        const generatePromises = topics.map(async (topic) => {
             try {
                 console.log(`Generating post for: ${topic.title}`);
                 const postData = await generatePost(topic.title);
@@ -75,29 +76,47 @@ export async function GET(request: NextRequest) {
                     },
                 });
 
-                // 5. Mark topic as complete in checklist
-                markTopicComplete(topic.number);
-
-                results.push({
+                return {
+                    success: true,
                     topicNumber: topic.number,
                     title: topic.title,
                     postId: createdPost.id,
                     status: "success",
-                });
+                };
             } catch (error: any) {
                 console.error(`Failed to generate post for topic ${topic.number}:`, error);
-                results.push({
+                return {
+                    success: false,
                     topicNumber: topic.number,
                     title: topic.title,
                     status: "failed",
                     error: error.message,
-                });
+                };
+            }
+        });
+
+        const parallelOutcomes = await Promise.allSettled(generatePromises);
+        const results = [];
+
+        // 5. Process results sequentially to avoid local file race conditions
+        for (const outcome of parallelOutcomes) {
+            if (outcome.status === 'fulfilled') {
+                const result = outcome.value;
+                if (result.success) {
+                    // Mark topic as complete locally only after successful generation
+                    markTopicComplete(result.topicNumber);
+                }
+                results.push(result);
+            } else {
+                // This shouldn't happen due to internal try/catch, but just in case
+                results.push({ success: false, status: "failed", error: "Unhandled internal promise rejection" });
             }
         }
 
         return NextResponse.json({
             message: "Processing completed",
             processedCount: results.length,
+            successCount: results.filter(r => r.success).length,
             results,
         });
     } catch (error: any) {
