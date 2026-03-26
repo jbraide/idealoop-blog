@@ -20,20 +20,20 @@ We have already configured your `build` script to handle Prisma and Next.js 16 r
 "build": "prisma generate && next build --webpack"
 ```
 
-## 3. Creating the Cron Job
-Vercel handles Cron jobs automatically via `vercel.json`. Create this file in your root directory:
+## 3. Creating the Cron Job (GitHub Actions)
+Since Vercel's native cron can sometimes be unreliable on free tiers, we have configured a **GitHub Actions Workflow** to handle the automation perfectly.
 
-```json
-{
-  "crons": [
-    {
-      "path": "/api/cron/generate-posts",
-      "schedule": "0 0 * * *"
-    }
-  ]
-}
-```
-*The above schedule (`0 16 * * *`) triggers the agent every day at 5:00 PM GMT+1 (4:00 PM UTC).*
+We've created a file at `.github/workflows/generate-posts.yml` which triggers every day at **6:15 AM GMT+1 (05:15 UTC)**.
+
+**To enable this in GitHub:**
+1. Go to your repository on GitHub.
+2. Click **Settings** > **Secrets and variables** > **Actions**.
+3. Click **New repository secret**.
+4. Set the **Name** to: `CRON_SECRET`
+5. Set the **Secret** to your generated key (e.g., `dce903c05fd02587e2f74540f27d12a61b94a956de14e23e46067614003a7d19`).
+6. Click **Add secret**.
+
+GitHub Actions will now securely trigger the `/api/cron/generate-posts` endpoint daily. You can also trigger it manually from the "Actions" tab in GitHub.
 
 ## 4. Manual Trigger
 To manually trigger the AI agent, make an authenticated GET request:

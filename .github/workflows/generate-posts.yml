@@ -1,0 +1,17 @@
+name: Generate AI Blog Post
+
+on:
+  schedule:
+    # Runs at 05:15 UTC (6:15 AM GMT+1) every day
+    - cron: '15 5 * * *'
+  # Allows manual triggering from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  trigger-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit Generate Posts Endpoint
+        # We use failing flags (-f) so the action turns red if the API returns a 4xx or 5xx error
+        run: |
+          curl -f -X GET "https://blog.idealoop.xyz/api/cron/generate-posts?secret=${{ secrets.CRON_SECRET }}"
