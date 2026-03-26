@@ -2,8 +2,10 @@ name: Generate AI Blog Post
 
 on:
   schedule:
-    # Runs at 05:15 UTC (6:15 AM GMT+1) every day
+    # Daily: Runs at 06:55 UTC every day (blog post generation)
     - cron: '55 6 * * *'
+    # Weekly: Runs at 05:15 UTC every Monday (competitor research)
+    - cron: '15 5 * * 1'
   # Allows manual triggering from the GitHub Actions tab
   workflow_dispatch:
 
@@ -12,6 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Hit Generate Posts Endpoint
-        # We use failing flags (-f) so the action turns red if the API returns a 4xx or 5xx error
         run: |
           curl -f -X GET "https://blog.idealoop.xyz/api/cron/generate-posts?secret=${{ secrets.CRON_SECRET }}"
+
+  research-competitors:
+    runs-on: ubuntu-latest
+    # Only run on Mondays (day 1)
+    if: github.event.schedule == '15 5 * * 1' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Hit Research Competitors Endpoint
+        run: |
+          curl -f -X GET "https://blog.idealoop.xyz/api/cron/research-competitors?secret=${{ secrets.CRON_SECRET }}"

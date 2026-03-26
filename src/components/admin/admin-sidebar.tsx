@@ -14,6 +14,7 @@ import {
   Users,
   Tag,
   KeyRound,
+  Search,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -60,6 +61,13 @@ const navigationItems = [
     icon: Tag,
     description: "Manage content tags",
     roles: ["ADMIN", "EDITOR"],
+  },
+  {
+    name: "Research",
+    href: "/admin/research",
+    icon: Search,
+    description: "Competitor intelligence",
+    roles: ["ADMIN"],
   },
   {
     name: "Users",

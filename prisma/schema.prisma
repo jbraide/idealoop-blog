@@ -2,8 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -268,6 +267,35 @@ model Setting {
   value String @db.Text
 
   @@map("settings")
+}
+
+model Competitor {
+  id        String   @id @default(cuid())
+  name      String
+  domain    String   @unique
+  blogPath  String   @default("/blog")  // Path to blog listing page
+  active    Boolean  @default(true)
+  research  CompetitorResearch[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("competitors")
+}
+
+model CompetitorResearch {
+  id           String     @id @default(cuid())
+  competitorId String
+  competitor   Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  category     String     // "blog_topics", "seo_meta", "content_gaps"
+  data         Json       // Raw scraped data
+  summary      String     @db.Text  // AI-generated analysis
+  source       String     // URL that was scraped
+  scrapedAt    DateTime   @default(now())
+
+  @@index([competitorId])
+  @@index([category])
+  @@index([scrapedAt])
+  @@map("competitor_research")
 }
 
 // Enums

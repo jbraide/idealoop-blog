@@ -73,3 +73,81 @@ export async function generatePost(title: string): Promise<GeneratedPost> {
         throw error;
     }
 }
+
+export interface CompetitorAnalysis {
+    keyThemes: string[];
+    contentGaps: string[];
+    seoOpportunities: string[];
+    summary: string;
+    recommendedTopics: string[];
+}
+
+export async function analyzeCompetitorBlog(
+    competitorName: string,
+    blogPosts: { title: string; url: string; excerpt?: string }[],
+    meta: { title: string; description: string }
+): Promise<CompetitorAnalysis> {
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+    if (!apiKey) {
+        throw new Error("DEEPSEEK_API_KEY is not defined");
+    }
+
+    const prompt = `
+    You are a competitive intelligence analyst for "Idealoop", a customer-driven product management and feedback collection platform (similar to Canny, Upvoty, Frill).
+
+    Analyze this data scraped from competitor "${competitorName}":
+
+    **Their Blog Posts:**
+    ${blogPosts.map((p, i) => `${i + 1}. "${p.title}" ${p.excerpt ? `- ${p.excerpt}` : ""}`).join("\n")}
+
+    **Their Site Meta:**
+    Title: ${meta.title}
+    Description: ${meta.description}
+
+    Provide a strategic analysis in JSON format:
+    {
+      "keyThemes": ["theme1", "theme2", ...],
+      "contentGaps": ["gap1", "gap2", ...],
+      "seoOpportunities": ["opportunity1", "opportunity2", ...],
+      "summary": "A 2-3 paragraph executive summary of their content strategy and how Idealoop can outperform them",
+      "recommendedTopics": ["topic1", "topic2", ...]
+    }
+
+    Focus on:
+    1. Key themes they consistently write about
+    2. Content gaps — topics in feedback/product management they're NOT covering that Idealoop could
+    3. SEO opportunities — keywords or angles Idealoop could target to outrank them
+    4. 5-10 specific blog post topics Idealoop should write to compete
+    `;
+
+    try {
+        const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+                model: "deepseek-chat",
+                messages: [
+                    { role: "system", content: "You are a competitive intelligence analyst specializing in SaaS content strategy." },
+                    { role: "user", content: prompt }
+                ],
+                response_format: { type: "json_object" },
+                temperature: 0.7,
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`DeepSeek API error: ${JSON.stringify(errorData)}`);
+        }
+
+        const data = await response.json();
+        const result = JSON.parse(data.choices[0].message.content);
+        return result as CompetitorAnalysis;
+    } catch (error) {
+        console.error("Error analyzing competitor with DeepSeek:", error);
+        throw error;
+    }
+}
