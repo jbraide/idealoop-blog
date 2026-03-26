@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ImageUploadModal } from "@/components/media/image-upload-modal";
 import { Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AITextOptimizer } from "@/components/ui/ai-text-optimizer";
 
 interface CKEditorProps {
   content: string;
@@ -25,6 +26,7 @@ export function CKEditorComponent({
 }: CKEditorProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [editorInstance, setEditorInstance] = useState<any>(null);
+  const [selectedHtml, setSelectedHtml] = useState<string>("");
 
   useEffect(() => {
     setIsMounted(true);
@@ -74,23 +76,45 @@ export function CKEditorComponent({
     }
   };
 
+  const handleReplaceOptimizedText = (optimizedHtml: string) => {
+    if (editorInstance) {
+      editorInstance.model.change((writer: any) => {
+        // Parse the optimized HTML string into view elements
+        const viewFragment = editorInstance.data.processor.toView(optimizedHtml);
+        // Convert view elements to model items
+        const modelFragment = editorInstance.data.toModel(viewFragment);
+        // Insert into the current selection
+        editorInstance.model.insertContent(modelFragment);
+      });
+      editorInstance.editing.view.focus();
+      setSelectedHtml("");
+    }
+  };
+
   return (
     <div className={`border rounded-lg bg-white shadow-sm ${className}`}>
       <div className="border-b bg-gray-50 p-2 flex items-center justify-between">
         <div className="text-sm text-gray-600">Rich Text Editor</div>
-        <ImageUploadModal
-          onImageSelect={handleImageSelect}
-          trigger={
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <ImageIcon className="h-4 w-4" />
-              Insert Image
-            </Button>
-          }
-        />
+        <div className="flex items-center gap-2">
+          <AITextOptimizer
+            selectedText={selectedHtml}
+            onReplace={handleReplaceOptimizedText}
+            disabled={disabled}
+          />
+          <ImageUploadModal
+            onImageSelect={handleImageSelect}
+            trigger={
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <ImageIcon className="h-4 w-4" />
+                Insert Image
+              </Button>
+            }
+          />
+        </div>
       </div>
       <style jsx global>{`
         .ck.ck-editor {
@@ -102,6 +126,19 @@ export function CKEditorComponent({
           font-size: 16px;
           line-height: 1.6;
         }
+        
+        /* Keep selection distinct (purple) even when editor loses focus */
+        .ck.ck-editor__editable ::selection,
+        .ck.ck-editor__editable.ck-focused ::selection {
+          background-color: #e9d5ff !important; /* purple-200 */
+          color: #4c1d95 !important; /* purple-900 */
+        }
+        .ck.ck-editor__editable::-moz-selection,
+        .ck.ck-editor__editable.ck-focused::-moz-selection {
+          background-color: #e9d5ff !important;
+          color: #4c1d95 !important;
+        }
+        
         .ck.ck-editor__editable h1 {
           font-size: 2.5rem;
           font-weight: 700;
@@ -210,6 +247,40 @@ export function CKEditorComponent({
               "400px",
               editor.editing.view.document.getRoot()!,
             );
+          });
+
+          // Track selection changes
+          editor.model.document.selection.on("change:range", () => {
+            const selection = editor.model.document.selection;
+            if (selection.isCollapsed) {
+              setSelectedHtml("");
+              return;
+            }
+
+            try {
+              // Extract the selected content as a model document fragment
+              const selectedContent = editor.model.getSelectedContent(selection);
+              // Safely convert model fragment to HTML string
+              const htmlString = editor.data.stringify(selectedContent);
+
+              // Only update if we actually have text (strip tags to check if it's empty)
+              const textContent = htmlString.replace(/<[^>]*>?/gm, "").trim();
+              if (textContent.length > 0) {
+                setSelectedHtml(htmlString);
+              } else {
+                setSelectedHtml("");
+              }
+            } catch (err) {
+              console.error("Failed to extract HTML from selection", err);
+              // Fallback to plain text if HTML extraction fails
+              let plainText = "";
+              for (const range of selection.getRanges()) {
+                for (const item of range.getItems()) {
+                  if ((item as any).data) plainText += (item as any).data;
+                }
+              }
+              setSelectedHtml(plainText);
+            }
           });
         }}
         onChange={(event: any, editor: any) => {
