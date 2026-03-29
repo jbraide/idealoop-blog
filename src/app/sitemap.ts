@@ -14,11 +14,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
 
     return [
+        {
+            url: baseUrl,
+            lastModified: new Date().toISOString().split('T')[0],
+            changeFrequency: 'daily' as const,
+            priority: 1.0,
+        },
         ...posts.map((post) => ({
             url: `${baseUrl}/posts/${post.slug}`,
             lastModified: post.updatedAt.toISOString().split('T')[0],
             changeFrequency: 'weekly' as const,
-            priority: 1.0,
+            priority: 0.8,
         })),
 
         ...categories.map((cat) => ({
