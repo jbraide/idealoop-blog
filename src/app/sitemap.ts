@@ -16,14 +16,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [
         ...posts.map((post) => ({
             url: `${baseUrl}/posts/${post.slug}`,
-            lastModified: post.updatedAt,
+            lastModified: post.updatedAt.toISOString().split('T')[0],
             changeFrequency: 'weekly' as const,
-            priority: 0.7,
+            priority: 1.0,
         })),
 
         ...categories.map((cat) => ({
             url: `${baseUrl}/categories/${cat.slug}`,
-            lastModified: cat.updatedAt,
+            lastModified: cat.updatedAt.toISOString().split('T')[0],
             changeFrequency: 'weekly' as const,
             priority: 0.5,
         })),
