@@ -14,27 +14,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
 
     return [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-        },
-        {
-            url: `${baseUrl}/about`,
-            lastModified: new Date(),
-        },
-        {
-            url: `${baseUrl}/contact`,
-            lastModified: new Date(),
-        },
-
         ...posts.map((post) => ({
             url: `${baseUrl}/posts/${post.slug}`,
             lastModified: post.updatedAt,
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
         })),
 
         ...categories.map((cat) => ({
             url: `${baseUrl}/categories/${cat.slug}`,
             lastModified: cat.updatedAt,
+            changeFrequency: 'weekly' as const,
+            priority: 0.5,
         })),
     ]
 }
